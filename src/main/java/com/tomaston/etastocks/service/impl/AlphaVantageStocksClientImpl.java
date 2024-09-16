@@ -1,5 +1,6 @@
 package com.tomaston.etastocks.service.impl;
 
+import com.tomaston.etastocks.domain.AVTimeSeriesDailyJson;
 import com.tomaston.etastocks.domain.AVTimeSeriesMonthlyJson;
 import com.tomaston.etastocks.service.AlphaVantageStocksClient;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,45 @@ public class AlphaVantageStocksClientImpl implements AlphaVantageStocksClient {
                     avTimeSeriesStockResponse,
                     params
             );
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                log.debug(Objects.requireNonNull(response.getBody()).toString());
+                throw new RuntimeException("Request not successful..");
+            }
+
+            return response.getBody();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public AVTimeSeriesDailyJson getAlphaVantageTimeSeriesDailyStock(final String symbol) {
+        final ParameterizedTypeReference<AVTimeSeriesDailyJson> avTimeSeriesStockResponse = new ParameterizedTypeReference<>() {
+        };
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("function", "TIME_SERIES_DAILY");
+        params.put("symbol", symbol);
+        params.put("apikey", alphaVantageApiKey);
+
+        try {
+            final ResponseEntity<AVTimeSeriesDailyJson> response = restTemplate.exchange(
+                    BASE_URL + "query?function={function}&symbol={symbol}&apikey={apikey}",
+                    HttpMethod.GET,
+                    entity,
+                    avTimeSeriesStockResponse,
+                    params
+            );
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                log.debug(Objects.requireNonNull(response.getBody()).toString());
+                throw new RuntimeException("Request not successful..");
+            }
 
             return response.getBody();
         } catch (RestClientException e) {

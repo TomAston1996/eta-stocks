@@ -7,4 +7,6 @@ import com.tomaston.etastocks.domain.AVTimeSeriesClientData;
  */
 public interface AlphaVantageStocksService {
     AVTimeSeriesClientData getTimeSeriesMonthlyStockData(final String symbol);
+
+    AVTimeSeriesClientData getTimeSeriesDailyStockData(final String symbol);
 }

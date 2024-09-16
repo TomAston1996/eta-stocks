@@ -25,17 +25,37 @@ public class AlphaVantageStocksServiceImpl implements AlphaVantageStocksService 
         this.avStocksClient = avStocksClient;
     }
 
+    /**
+     * @param symbol stock or ETF ticker symbol
+     * @return cleaned JSON data
+     */
     public AVTimeSeriesClientData getTimeSeriesMonthlyStockData(final String symbol) {
         final AVTimeSeriesMonthlyJson response = avStocksClient.getAlphaVantageTimeSeriesMonthlyStock(symbol);
+        return convertAlphaVantageRawResponse(response.metaData, response.seriesData);
+    }
 
-        log.info(String.valueOf(response.toString()));
+    /**
+     * @param symbol stock or ETF ticker symbol
+     * @return cleaned JSON data
+     */
+    public AVTimeSeriesClientData getTimeSeriesDailyStockData(final String symbol) {
+        final AVTimeSeriesDailyJson response = avStocksClient.getAlphaVantageTimeSeriesDailyStock(symbol);
+        return convertAlphaVantageRawResponse(response.metaData, response.seriesData);
+    }
 
+    /**
+     * Convert raw AV response JSON to cleaned JSON for the eta-stocks application
+     * @param metaData metadata
+     * @param seriesData series stock data i.e. monthly, daily etc.
+     * @return clean data
+     */
+    private AVTimeSeriesClientData convertAlphaVantageRawResponse(AVTimeSeriesJsonMetaData metaData, Map<String, AVTimeSeriesJsonRawData> seriesData) {
         //create a AVTimeSeriesClientData object to return to the client in JSON format
         AVTimeSeriesClientData clientResponse = new AVTimeSeriesClientData();
 
         //create list of monthly stock data
         List<AVTimeSeriesJsonCleanData> timeSeriesStockData = new ArrayList<>();
-        for (Map.Entry<String, AVTimeSeriesJsonRawData> entry : response.monthly.entrySet()) {
+        for (Map.Entry<String, AVTimeSeriesJsonRawData> entry : seriesData.entrySet()) {
             Long unixDateTime = DateTimeConverter.stringToUnix(entry.getKey());
             AVTimeSeriesJsonRawData data = entry.getValue();
             AVTimeSeriesJsonCleanData obj = new AVTimeSeriesJsonCleanData(
@@ -50,7 +70,7 @@ public class AlphaVantageStocksServiceImpl implements AlphaVantageStocksService 
         }
 
         //build the response with clean formatting
-        clientResponse.metaData = response.metaData;
+        clientResponse.metaData = metaData;
         clientResponse.seriesData = timeSeriesStockData;
 
         return clientResponse;

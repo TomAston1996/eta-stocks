@@ -19,16 +19,26 @@ public class StocksController {
         this.stocksService = stocksService;
     }
 
-    /**
-     * @param function options = { TIME_SERIES_DAILY, TIME_SERIES_MONTHLY, etc. }
+    /** Gets monthly data from Alpha Vantage stocks API service
      * @param symbol ticker code for the stock or ETF
      * @return JSON response
      */
     @GetMapping(value="/monthly", produces="application/json")
-    public ResponseEntity<AVTimeSeriesClientData> getTimeSeriesStockData(
+    public ResponseEntity<AVTimeSeriesClientData> getTimeSeriesStockMonthlyData(
             @RequestParam(name="symbol", required=true) final String symbol
     ) {
         return new ResponseEntity<AVTimeSeriesClientData>(stocksService.getTimeSeriesMonthlyStockData(symbol), HttpStatus.OK);
+    }
+
+    /** Gets daily data from Alpha Vantage stocks API service
+     * @param symbol ticker code for the stock or ETF
+     * @return JSON response
+     */
+    @GetMapping(value="/daily", produces="application/json")
+    public ResponseEntity<AVTimeSeriesClientData> getTimeSeriesStockDailyData(
+            @RequestParam(name="symbol", required=true) final String symbol
+    ) {
+        return new ResponseEntity<AVTimeSeriesClientData>(stocksService.getTimeSeriesDailyStockData(symbol), HttpStatus.OK);
     }
 
 }
