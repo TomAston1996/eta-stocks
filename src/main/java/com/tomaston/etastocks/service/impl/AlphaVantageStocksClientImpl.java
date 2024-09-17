@@ -2,6 +2,7 @@ package com.tomaston.etastocks.service.impl;
 
 import com.tomaston.etastocks.domain.AVTimeSeriesDailyJson;
 import com.tomaston.etastocks.domain.AVTimeSeriesMonthlyJson;
+import com.tomaston.etastocks.exception.ApiRequestException;
 import com.tomaston.etastocks.service.AlphaVantageStocksClient;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -54,9 +55,9 @@ public class AlphaVantageStocksClientImpl implements AlphaVantageStocksClient {
                     params
             );
 
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                log.debug(Objects.requireNonNull(response.getBody()).toString());
-                throw new RuntimeException("Request not successful..");
+            if (Objects.requireNonNull(response.getBody()).seriesData == null) {
+                log.debug(response.getBody().toString());
+                throw new ApiRequestException("Oops, the request params to Alpha Vantage are not valid!");
             }
 
             return response.getBody();
@@ -88,9 +89,13 @@ public class AlphaVantageStocksClientImpl implements AlphaVantageStocksClient {
                     params
             );
 
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                log.debug(Objects.requireNonNull(response.getBody()).toString());
-                throw new RuntimeException("Request not successful..");
+            if (response.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
+                throw new ApiRequestException("Oops, you've been rate limited by Alpha Vantage!");
+            }
+
+            if (Objects.requireNonNull(response.getBody()).seriesData == null) {
+                log.debug(response.getBody().toString());
+                throw new ApiRequestException("Oops, the request params to Alpha Vantage are not valid!");
             }
 
             return response.getBody();

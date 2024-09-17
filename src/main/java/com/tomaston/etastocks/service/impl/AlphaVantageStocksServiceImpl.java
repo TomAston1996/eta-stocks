@@ -1,6 +1,7 @@
 package com.tomaston.etastocks.service.impl;
 
 import com.tomaston.etastocks.domain.*;
+import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
 import com.tomaston.etastocks.service.AlphaVantageStocksClient;
 import com.tomaston.etastocks.service.AlphaVantageStocksService;
 import com.tomaston.etastocks.utils.DateTimeConverter;
@@ -29,7 +30,7 @@ public class AlphaVantageStocksServiceImpl implements AlphaVantageStocksService 
      * @param symbol stock or ETF ticker symbol
      * @return cleaned JSON data
      */
-    public AVTimeSeriesClientData getTimeSeriesMonthlyStockData(final String symbol) {
+    public AVTimeSeriesDTO getTimeSeriesMonthlyStockData(final String symbol) {
         final AVTimeSeriesMonthlyJson response = avStocksClient.getAlphaVantageTimeSeriesMonthlyStock(symbol);
         return convertAlphaVantageRawResponse(response.metaData, response.seriesData);
     }
@@ -38,7 +39,7 @@ public class AlphaVantageStocksServiceImpl implements AlphaVantageStocksService 
      * @param symbol stock or ETF ticker symbol
      * @return cleaned JSON data
      */
-    public AVTimeSeriesClientData getTimeSeriesDailyStockData(final String symbol) {
+    public AVTimeSeriesDTO getTimeSeriesDailyStockData(final String symbol) {
         final AVTimeSeriesDailyJson response = avStocksClient.getAlphaVantageTimeSeriesDailyStock(symbol);
         return convertAlphaVantageRawResponse(response.metaData, response.seriesData);
     }
@@ -49,9 +50,9 @@ public class AlphaVantageStocksServiceImpl implements AlphaVantageStocksService 
      * @param seriesData series stock data i.e. monthly, daily etc.
      * @return clean data
      */
-    private AVTimeSeriesClientData convertAlphaVantageRawResponse(AVTimeSeriesJsonMetaData metaData, Map<String, AVTimeSeriesJsonRawData> seriesData) {
+    private AVTimeSeriesDTO convertAlphaVantageRawResponse(AVTimeSeriesJsonMetaData metaData, Map<String, AVTimeSeriesJsonRawData> seriesData) {
         //create a AVTimeSeriesClientData object to return to the client in JSON format
-        AVTimeSeriesClientData clientResponse = new AVTimeSeriesClientData();
+        AVTimeSeriesDTO clientResponse = new AVTimeSeriesDTO();
 
         //create list of monthly stock data
         List<AVTimeSeriesJsonCleanData> timeSeriesStockData = new ArrayList<>();

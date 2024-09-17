@@ -1,12 +1,12 @@
 package com.tomaston.etastocks.service;
 
-import com.tomaston.etastocks.domain.AVTimeSeriesClientData;
+import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
 
 /**
  * Interface for AV Stocks external API service
  */
 public interface AlphaVantageStocksService {
-    AVTimeSeriesClientData getTimeSeriesMonthlyStockData(final String symbol);
+    AVTimeSeriesDTO getTimeSeriesMonthlyStockData(final String symbol);
 
-    AVTimeSeriesClientData getTimeSeriesDailyStockData(final String symbol);
+    AVTimeSeriesDTO getTimeSeriesDailyStockData(final String symbol);
 }

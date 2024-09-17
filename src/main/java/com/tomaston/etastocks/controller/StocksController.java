@@ -1,6 +1,6 @@
 package com.tomaston.etastocks.controller;
 
-import com.tomaston.etastocks.domain.AVTimeSeriesClientData;
+import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
 import com.tomaston.etastocks.service.AlphaVantageStocksService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,10 @@ public class StocksController {
      * @return JSON response
      */
     @GetMapping(value="/monthly", produces="application/json")
-    public ResponseEntity<AVTimeSeriesClientData> getTimeSeriesStockMonthlyData(
+    public ResponseEntity<AVTimeSeriesDTO> getTimeSeriesStockMonthlyData(
             @RequestParam(name="symbol", required=true) final String symbol
     ) {
-        return new ResponseEntity<AVTimeSeriesClientData>(stocksService.getTimeSeriesMonthlyStockData(symbol), HttpStatus.OK);
+        return new ResponseEntity<AVTimeSeriesDTO>(stocksService.getTimeSeriesMonthlyStockData(symbol), HttpStatus.OK);
     }
 
     /** Gets daily data from Alpha Vantage stocks API service
@@ -35,10 +35,10 @@ public class StocksController {
      * @return JSON response
      */
     @GetMapping(value="/daily", produces="application/json")
-    public ResponseEntity<AVTimeSeriesClientData> getTimeSeriesStockDailyData(
+    public ResponseEntity<AVTimeSeriesDTO> getTimeSeriesStockDailyData(
             @RequestParam(name="symbol", required=true) final String symbol
     ) {
-        return new ResponseEntity<AVTimeSeriesClientData>(stocksService.getTimeSeriesDailyStockData(symbol), HttpStatus.OK);
+        return new ResponseEntity<AVTimeSeriesDTO>(stocksService.getTimeSeriesDailyStockData(symbol), HttpStatus.OK);
     }
 
 }
