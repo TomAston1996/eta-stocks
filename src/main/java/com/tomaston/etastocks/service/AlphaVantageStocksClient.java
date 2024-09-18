@@ -49,7 +49,7 @@ public class AlphaVantageStocksClient {
             functionCode = functionMap.get(function);
         } else {
             log.debug("Function code: '{}' used", function);
-            throw new ApiRequestException("Information: the 'function' request parameter you provided to Alpha Vantage is not valid." +
+            throw new ApiRequestException("The 'function' request parameter you provided to Alpha Vantage is not valid." +
                     " Function options are: {'monthly', 'daily'}");
         }
 
@@ -74,16 +74,17 @@ public class AlphaVantageStocksClient {
                     params
             );
 
-            if (response.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
-                throw new RateLimitedRequestException("Information: Alpha Vantage limits API calls to 25 requests per" +
-                        " day for free users.");
-            }
-
             //Alpha Vantage API doesn't send a 4XX responses when request parameters are incorrect, therefore if
             //the contents of the body is just a string (no metaData or seriesData) it is an error message
             if (Objects.requireNonNull(response.getBody()).seriesData == null) {
-                log.debug(response.getBody().toString());
-                throw new ApiRequestException("Information: the request params to Alpha Vantage are likely not valid.");
+                String errorInfo = response.getBody().errorInfo;
+                log.debug(errorInfo);
+                if (errorInfo.contains("API rate limit")) {
+                    throw new RateLimitedRequestException("Alpha Vantage limits API calls to 25 requests per" +
+                            " day for free users.");
+                } else {
+                    throw new ApiRequestException("The request params to Alpha Vantage are likely not valid.");
+                }
             }
 
             return response.getBody();

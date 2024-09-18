@@ -8,12 +8,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Date-time conversion class for converting string to unix dates and vice versa
+/** Date-time conversion class for converting string to unix dates and vice versa
  */
 @Slf4j
 public class DateTimeConverter {
+
     private static Logger log = LoggerFactory.getLogger(DateTimeConverter.class);
+
     /**
      * @param stringDate in the format YYYY-MM-DD
      * @return unix date time in milliseconds
