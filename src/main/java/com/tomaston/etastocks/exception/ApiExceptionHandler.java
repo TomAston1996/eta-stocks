@@ -20,4 +20,14 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = {RateLimitedRequestException.class})
+    public ResponseEntity<Object> handleRateLimitedRequestException(RateLimitedRequestException e) {
+        ApiException rateLimitException = new ApiException(
+                e.getMessage(),
+                HttpStatus.TOO_MANY_REQUESTS,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return new ResponseEntity<>(rateLimitException, HttpStatus.TOO_MANY_REQUESTS);
+    }
 }
