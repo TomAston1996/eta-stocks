@@ -26,16 +26,20 @@ public class AlphaVantageStocksClient {
     @Value("${alphaVantageApiKey}")
     private String alphaVantageApiKey;
 
+    private final Map<String, String> functionMap;
+
     public AlphaVantageStocksClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+        this.functionMap = Map.of(
+                "monthly", "TIME_SERIES_MONTHLY",
+                "daily", "TIME_SERIES_DAILY"
+        );
     }
 
     public AVTimeSeriesJson getAlphaVantageTimeSeriesStockData(final String symbol, final String function) {
         String functionCode;
-        if (function.equals("monthly")) {
-            functionCode = "TIME_SERIES_MONTHLY";
-        } else if (function.equals("daily")) {
-            functionCode = "TIME_SERIES_DAILY";
+        if (functionMap.containsKey(function)) {
+            functionCode = functionMap.get(function);
         } else {
             throw new ApiRequestException("Oops, the request params to Alpha Vantage are not valid!");
         }
