@@ -40,7 +40,7 @@ public class AlphaVantageStocksService {
      * @param seriesData series stock data i.e. monthly, daily etc.
      * @return clean data
      */
-    private AVTimeSeriesDTO convertAlphaVantageRawResponse(AVTimeSeriesJsonMetaData metaData, Map<String, AVTimeSeriesJsonRawData> seriesData) {
+    public AVTimeSeriesDTO convertAlphaVantageRawResponse(AVTimeSeriesJsonMetaData metaData, Map<String, AVTimeSeriesJsonRawData> seriesData) {
         //create a AVTimeSeriesClientData object to return to the client in JSON format
         AVTimeSeriesDTO clientResponse = new AVTimeSeriesDTO();
 
