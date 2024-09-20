@@ -15,4 +15,8 @@ public class MapperUtil {
     public static AVTimeSeriesJson deserializeAVRawSeries(String json) throws JsonProcessingException {
         return objectMapper.readValue(json, AVTimeSeriesJson.class);
     }
+
+    public static String stringifyAVRawSeries(AVTimeSeriesJson obj) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(obj);
+    }
 }
