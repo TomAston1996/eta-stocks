@@ -40,6 +40,8 @@ class AlphaVantageStocksServiceTest {
         );
     }
 
+    /** Unit test for cleaning function for time series data returned from the AV client
+     */
     @Test
     void shouldReturnTimeSeriesDTO() {
         AVTimeSeriesDTO res = this.alphaVantageStocksService.convertAlphaVantageRawResponse(
@@ -54,7 +56,7 @@ class AlphaVantageStocksServiceTest {
 
         //make sure each data object contains the correct info
         for (AVTimeSeriesJsonCleanData data : seriesData) {
-            assertAll("Series Data",
+            assertAll("Series Data Null Check",
                     () -> assertNotNull(data.closeStockPrice()),
                     () -> assertNotNull(data.lowStockPrice()),
                     () -> assertNotNull(data.highStockPrice()),
@@ -64,6 +66,8 @@ class AlphaVantageStocksServiceTest {
         }
     }
 
+    /** Unit test for cleaning function for metadata returned from the AV client
+     */
     @Test
     void shouldReturnMetaData() {
         AVTimeSeriesDTO res = this.alphaVantageStocksService.convertAlphaVantageRawResponse(
@@ -73,7 +77,8 @@ class AlphaVantageStocksServiceTest {
 
         AVTimeSeriesJsonMetaData metaData = res.metaData;
 
-        assertAll("Meta Data Fields Not Null",
+        //make sure all metadata values are present in the returned object
+        assertAll("Meta Data Null Check",
                 () -> assertNotNull(metaData.info),
                 () -> assertNotNull(metaData.lastRefreshed),
                 () -> assertNotNull(metaData.symbol),

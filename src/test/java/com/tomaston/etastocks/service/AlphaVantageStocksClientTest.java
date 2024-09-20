@@ -32,6 +32,9 @@ class AlphaVantageStocksClientTest {
     @Autowired
     AlphaVantageStocksClient client;
 
+    @Autowired
+    private RestTemplate template;
+
     AVTimeSeriesJson avRawDataTestJson;
 
     @Value("${alphaVantageApiKey}")
@@ -39,29 +42,43 @@ class AlphaVantageStocksClientTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        server = MockRestServiceServer.createServer(new RestTemplate());
+        server = MockRestServiceServer.createServer(template);
         String avRawDataJson = FileUtil.readFromFileToString("/files/alpha_vantage_raw_stock_data.json");
         this.avRawDataTestJson = MapperUtil.deserializeAVRawSeries(avRawDataJson);
     }
 
-    @Test
-    void shouldReturnTrue() throws JsonProcessingException {
 
-        //when
-        this.server.expect(requestTo(
-                "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=LON:VUAG&apikey=" + alphaVantageApiKey))
+    /** Mock http request to https://www.alphavantage.co
+     */
+    @Test
+    void shouldGetMonthlySeriesData() throws JsonProcessingException {
+        server.expect(requestTo("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=LON:VUAG&apikey=" + alphaVantageApiKey))
                 .andRespond(withSuccess(MapperUtil.stringifyAVRawSeries(avRawDataTestJson), MediaType.APPLICATION_JSON));
 
-        //then
         AVTimeSeriesJson response = client.getAlphaVantageTimeSeriesStockData("LON:VUAG", "monthly");
-        assertEquals(response.seriesData.size(), avRawDataTestJson.seriesData.size());
+
+        assertEquals(6, response.seriesData.size());
     }
 
+    /** test getAlphaVantageTimeSeries() being supplied with incorrect query parameters
+     */
     @Test
     void shouldThrowBadRequestException() throws JsonProcessingException {
-        assertThrows(
+        //TODO include a check for missing or incorrect symbol type in this test
+        String emptyFunctionParameter = "";
+
+        ApiRequestException missingFunctionException =  assertThrows(
                 ApiRequestException.class,
-                () -> client.getAlphaVantageTimeSeriesStockData("LON:VUAG", "")
+                () -> client.getAlphaVantageTimeSeriesStockData("LON:VUAG", emptyFunctionParameter));
+
+        String expectedBadRequestMessage = "The 'function' request parameter you provided to Alpha Vantage is not valid." +
+                " Function options are: {'monthly', 'daily'}";
+
+
+        System.out.println(missingFunctionException.getMessage());
+
+        assertAll("Incorrect query parameter exception message check",
+                () -> assertEquals(expectedBadRequestMessage, missingFunctionException.getMessage())
         );
     }
 
