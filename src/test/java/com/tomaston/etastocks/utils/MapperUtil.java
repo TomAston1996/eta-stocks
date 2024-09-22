@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tomaston.etastocks.domain.AVTimeSeriesJson;
 import com.tomaston.etastocks.domain.AVTimeSeriesJsonMetaData;
 import com.tomaston.etastocks.domain.AVTimeSeriesJsonRawData;
+import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
 
 import java.util.Map;
 
@@ -14,6 +15,10 @@ public class MapperUtil {
 
     public static AVTimeSeriesJson deserializeAVRawSeries(String json) throws JsonProcessingException {
         return objectMapper.readValue(json, AVTimeSeriesJson.class);
+    }
+
+    public static AVTimeSeriesDTO deserializeAVClientSeries(String json) throws JsonProcessingException {
+        return objectMapper.readValue(json, AVTimeSeriesDTO.class);
     }
 
     public static String stringifyAVRawSeries(AVTimeSeriesJson obj) throws JsonProcessingException {

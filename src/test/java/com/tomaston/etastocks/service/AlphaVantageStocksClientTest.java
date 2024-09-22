@@ -52,6 +52,7 @@ class AlphaVantageStocksClientTest {
      */
     @Test
     void shouldGetMonthlySeriesData() throws JsonProcessingException {
+        //mock out client response with imported test json data
         server.expect(requestTo("https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=LON:VUAG&apikey=" + alphaVantageApiKey))
                 .andRespond(withSuccess(MapperUtil.stringifyAVRawSeries(avRawDataTestJson), MediaType.APPLICATION_JSON));
 

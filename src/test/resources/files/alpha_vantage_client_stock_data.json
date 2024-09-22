@@ -1,0 +1,45 @@
+{
+  "metaData": {
+    "1. Information": "Monthly Prices (open, high, low, close) and Volumes",
+    "2. Symbol": "LON:VUAG",
+    "3. Last Refreshed": "2024-09-20",
+    "4. Time Zone": "US/Eastern"
+  },
+  "seriesData": [
+    {
+      "unixTimestamp": 1726786800000,
+      "openStockPrice": 81.28,
+      "closeStockPrice": 81.19,
+      "lowStockPrice": 78.12,
+      "highStockPrice": 83.0
+    },
+    {
+      "unixTimestamp": 1724972400000,
+      "openStockPrice": 81.95,
+      "closeStockPrice": 80.775,
+      "lowStockPrice": 75.58,
+      "highStockPrice": 82.56
+    },
+    {
+      "unixTimestamp": 1722380400000,
+      "openStockPrice": 81.75,
+      "closeStockPrice": 81.49,
+      "lowStockPrice": 79.3,
+      "highStockPrice": 90.0
+    },
+    {
+      "unixTimestamp": 1719529200000,
+      "openStockPrice": 78.58,
+      "closeStockPrice": 82.37,
+      "lowStockPrice": 77.6472,
+      "highStockPrice": 83.4
+    },
+    {
+      "unixTimestamp": 1717110000000,
+      "openStockPrice": 76.11,
+      "closeStockPrice": 77.385,
+      "lowStockPrice": 75.71,
+      "highStockPrice": 79.44
+    }
+  ]
+}

@@ -33,11 +33,6 @@ class AlphaVantageStocksServiceTest {
     void setUp() throws IOException {
         String avRawDataJson = FileUtil.readFromFileToString("/files/alpha_vantage_raw_stock_data.json");
         this.avRawDataTestJson = MapperUtil.deserializeAVRawSeries(avRawDataJson);
-
-        AVTimeSeriesDTO res = this.alphaVantageStocksService.convertAlphaVantageRawResponse(
-                this.avRawDataTestJson.metaData,
-                this.avRawDataTestJson.seriesData
-        );
     }
 
     /** Unit test for cleaning function for time series data returned from the AV client
