@@ -1,6 +1,7 @@
 package com.tomaston.etastocks.service;
 
 import com.tomaston.etastocks.domain.*;
+import com.tomaston.etastocks.dto.AVEtfProfileDTO;
 import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
 import com.tomaston.etastocks.utils.DateTimeConverter;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,6 +34,14 @@ public class AlphaVantageStocksService {
     public AVTimeSeriesDTO getTimeSeriesStockData(final String symbol, final String function) {
         final AVTimeSeriesJson response = avStocksClient.getAlphaVantageTimeSeriesStockData(symbol, function);
         return convertAlphaVantageRawResponse(response.metaData, response.seriesData);
+    }
+
+    public AVEtfProfileDTO getEtfProfileData(final String symbol, final String function) {
+        final AVEtfProfileJson response = avStocksClient.getAlphaVantageEtfProfileData(symbol, function);
+        AVEtfProfileDTO avEtfProfileDTO = new AVEtfProfileDTO();
+        avEtfProfileDTO.sectorsData = response.sectorsData;
+        avEtfProfileDTO.topTenHoldings = response.holdingsData.stream().limit(10).collect(Collectors.toList());
+        return avEtfProfileDTO;
     }
 
     /**

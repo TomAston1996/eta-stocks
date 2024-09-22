@@ -43,12 +43,14 @@ class StocksControllerTest {
         this.avClientDataTestJson = MapperUtil.deserializeAVClientSeries(avClientDataJson);
     }
 
+    /** Tests GET method for obtaining AV time series stock data
+     */
     @Test
     public void shouldReturnAVSeriesClientData() throws Exception {
 
         when(stocksService.getTimeSeriesStockData("LON:VUAG", "monthly")).thenReturn(avClientDataTestJson);
 
-        ResultActions response = mockMvc.perform(get("/api/stocks")
+        ResultActions response = mockMvc.perform(get("/api/stocks/series")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("symbol", "LON:VUAG")
                 .param("function", "monthly"));
