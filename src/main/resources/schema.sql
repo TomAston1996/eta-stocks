@@ -1,21 +1,19 @@
 --users
 CREATE TABLE IF NOT EXISTS Users (
-    userId INT NOT NULL,
+    userId SERIAL PRIMARY KEY,
     email varchar(250) NOT NULL,
     created_on timestamp NOT NULL,
-    pass varchar(250) NOT NULL,
-    PRIMARY KEY (userId)
+    pass varchar(250) NOT NULL
 );
 
 --stocks
 CREATE TABLE IF NOT EXISTS Stocks (
-    stockId INT NOT NULL,
+    stockId SERIAL PRIMARY KEY,
     symbol varchar(50) NOT NULL,
     name varchar(250) NOT NULL,
     type varchar(250) NOT NULL,
     region varchar(250) NOT NULL,
-    currency varchar(250) NOT NULL,
-    PRIMARY KEY (stockId)
+    currency varchar(250) NOT NULL
 );
 
 --user-stocks

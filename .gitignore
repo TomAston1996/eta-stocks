@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 **/src/main/resources/application.properties
+/psql-commands.txt
 
 ### STS ###
 .apt_generated
