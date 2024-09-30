@@ -20,6 +20,4 @@ public class AVTimeSeriesJson {
 
     @JsonProperty("Information")
     public String errorInfo;
-
-
 }

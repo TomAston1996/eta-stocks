@@ -1,6 +1,8 @@
 package com.tomaston.etastocks.controller;
 
+import com.tomaston.etastocks.domain.AVTickerProfileJson;
 import com.tomaston.etastocks.dto.AVEtfProfileDTO;
+import com.tomaston.etastocks.dto.AVTickerSearchDTO;
 import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
 import com.tomaston.etastocks.service.AlphaVantageStocksService;
 import org.springframework.http.HttpStatus;
@@ -33,12 +35,28 @@ public class StocksController {
         return new ResponseEntity<AVTimeSeriesDTO>(stocksService.getTimeSeriesStockData(symbol, function), HttpStatus.OK);
     }
 
+    /**
+     * @param symbol ticker code for the stock or ETF
+     * @param function options = 'etfProfile' //TODO to be removed
+     * @return JSON
+     */
     @GetMapping(value="/etf", produces="application/json")
     public ResponseEntity<AVEtfProfileDTO> getEtfProfileData(
             @RequestParam(name="symbol", required=true) final String symbol,
             @RequestParam(name="function", required=true) final String function
     ) {
         return new ResponseEntity<AVEtfProfileDTO>(stocksService.getEtfProfileData(symbol, function), HttpStatus.OK);
+    }
+
+    /**
+     * @param symbol ticker code for the stock or ETF
+     * @return JSON
+     */
+    @GetMapping(value="/searchTicker", produces="application/json")
+    public ResponseEntity<AVTickerSearchDTO> getTickerSearchData(
+            @RequestParam(name="symbol", required=true) final String symbol
+    ) {
+        return new ResponseEntity<AVTickerSearchDTO>(stocksService.getTickerSearchData(symbol), HttpStatus.OK);
     }
 
 }

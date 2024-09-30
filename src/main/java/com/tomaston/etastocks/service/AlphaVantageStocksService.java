@@ -2,6 +2,8 @@ package com.tomaston.etastocks.service;
 
 import com.tomaston.etastocks.domain.*;
 import com.tomaston.etastocks.dto.AVEtfProfileDTO;
+import com.tomaston.etastocks.dto.AVTickerDataDTO;
+import com.tomaston.etastocks.dto.AVTickerSearchDTO;
 import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
 import com.tomaston.etastocks.utils.DateTimeConverter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +38,41 @@ public class AlphaVantageStocksService {
         return convertAlphaVantageRawResponse(response.metaData, response.seriesData);
     }
 
+    /**
+     * @param symbol stock or ETF ticker symbol
+     * @param function options = 'etfProfile' //TODO remove this - is not needed from client
+     * @return clean data
+     */
     public AVEtfProfileDTO getEtfProfileData(final String symbol, final String function) {
         final AVEtfProfileJson response = avStocksClient.getAlphaVantageEtfProfileData(symbol, function);
         AVEtfProfileDTO avEtfProfileDTO = new AVEtfProfileDTO();
         avEtfProfileDTO.sectorsData = response.sectorsData;
         avEtfProfileDTO.topTenHoldings = response.holdingsData.stream().limit(10).collect(Collectors.toList());
         return avEtfProfileDTO;
+    }
+
+    /**
+     * @param symbol symbol search string
+     * @return list of tickers returned from search term
+     */
+    public AVTickerSearchDTO getTickerSearchData(final String symbol) {
+        AVTickerProfileJson response = avStocksClient.getAlphaVantageTickerData(symbol);
+
+        List<AVTickerDataDTO> bestMatches = new ArrayList<>(10);
+        for (AVTickerData ticker : response.bestMatches) {
+            AVTickerDataDTO clientTicker = new AVTickerDataDTO(
+                    ticker.symbol,
+                    ticker.name,
+                    ticker.type,
+                    ticker.region,
+                    ticker.currency
+            );
+            bestMatches.add(clientTicker);
+        }
+
+        AVTickerSearchDTO dto = new AVTickerSearchDTO();
+        dto.bestMatches = bestMatches;
+        return dto;
     }
 
     /**

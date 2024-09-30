@@ -1,8 +1,10 @@
 package com.tomaston.etastocks.service;
 
 import com.tomaston.etastocks.domain.AVEtfProfileJson;
+import com.tomaston.etastocks.domain.AVTickerProfileJson;
 import com.tomaston.etastocks.domain.AVTimeSeriesJson;
 import com.tomaston.etastocks.exception.ApiRequestException;
+import com.tomaston.etastocks.exception.NotFoundRequestException;
 import com.tomaston.etastocks.exception.RateLimitedRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -131,7 +133,40 @@ public class AlphaVantageStocksClient {
         } catch (RestClientException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    AVTickerProfileJson getAlphaVantageTickerData(final String keywords) {
+
+        final ParameterizedTypeReference<AVTickerProfileJson> avTickerSearchResponse = new ParameterizedTypeReference<>() {
+        };
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("function", "SYMBOL_SEARCH");
+        params.put("keywords", keywords);
+        params.put("apikey", alphaVantageApiKey);
+
+        //TODO potential unnecessary code replication here - perhaps refactor
+        try {
+            final ResponseEntity<AVTickerProfileJson> response = restTemplate.exchange(
+                    BASE_URL + "query?function={function}&keywords={keywords}&apikey={apikey}",
+                    HttpMethod.GET,
+                    entity,
+                    avTickerSearchResponse,
+                    params
+            );
+
+            if (Objects.requireNonNull(response.getBody()).bestMatches.isEmpty()) {
+                throw new NotFoundRequestException("No search results for this ETF symbol...");
+            }
+
+            return response.getBody();
+        } catch (RestClientException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String getValidFunctionCode(String function) {

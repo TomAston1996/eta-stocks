@@ -30,4 +30,14 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(rateLimitException, HttpStatus.TOO_MANY_REQUESTS);
     }
+
+    @ExceptionHandler(value = {NotFoundRequestException.class})
+    public ResponseEntity<Object> handleNotFoundRequestException(NotFoundRequestException e) {
+        ApiException notFoundException = new ApiException(
+                e.getMessage(),
+                HttpStatus.NOT_FOUND,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return new ResponseEntity<>(notFoundException, HttpStatus.NOT_FOUND);
+    }
 }
