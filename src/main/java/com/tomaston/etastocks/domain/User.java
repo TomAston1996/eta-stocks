@@ -11,6 +11,5 @@ public record User(
         @NotEmpty
         String email,
         LocalDateTime createdOn,
-        @NotEmpty
         String pass
 ) {}

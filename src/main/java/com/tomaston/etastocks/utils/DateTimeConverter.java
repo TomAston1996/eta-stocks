@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /** Date-time conversion class for converting string to unix dates and vice versa
@@ -28,5 +31,10 @@ public class DateTimeConverter {
             log.warn("Parsing Alpha Vantage string date - format not recognised: {}", stringDate);
             return null;
         }
+    }
+
+    public static Long localTimestampToUnix(LocalDateTime localDateTime) {
+        ZonedDateTime zdt = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
+        return zdt.toInstant().toEpochMilli();
     }
 }

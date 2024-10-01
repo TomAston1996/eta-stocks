@@ -1,54 +1,66 @@
 package com.tomaston.etastocks.controller;
 
 import com.tomaston.etastocks.domain.User;
-import com.tomaston.etastocks.exception.NotFoundRequestException;
-import com.tomaston.etastocks.repository.UserRepository;
+import com.tomaston.etastocks.dto.UserDTO;
+import com.tomaston.etastocks.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    /** @return all users at api/users
+    /** GET all users
+     * @return all users at api/users
      */
     @GetMapping("")
-    List<User> findAll() {
-        return userRepository.findAll();
+    List<UserDTO> findAll() {
+        return userService.getAllUsers();
     }
 
-    /**
+    /** GET user
      * @param userId user id
      * @return first occurrence of a user by that id or 404 if not found
      */
-    @GetMapping("/{id}")
-    User findById(@PathVariable Integer userId) {
-        //Optional class has methods to show if something was returned or not
-        //If the optional class is empty then the id wasn't found, and we can throw a 404
-        //Otherwise we return the get method
-        Optional<User> run = userRepository.findById(userId);
-        if (run.isEmpty()) {
-            throw new NotFoundRequestException("User not found...");
-        }
-        return run.get();
+    @GetMapping("/{userId}")
+    UserDTO findById(@PathVariable Integer userId) {
+        return userService.getUserById(userId);
     }
 
-    /**
+    /** CREATE user
      * @param user json object in the body with HTTP 201
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    void create(@Valid @RequestBody User user) {
-        userRepository.save(user);
+    String create(@Valid @RequestBody User user) {
+        return userService.createUser(user);
+    }
+
+    /** UPDATE user by id
+     * @param user user info to be updated
+     * @param userId user id
+     * @return userDTO object
+     */
+    @PutMapping("/{userId}")
+    UserDTO update(@RequestBody User user, @PathVariable Integer userId) {
+        return userService.updateUser(user, userId);
+    }
+
+    /** DELETE user by id
+     * @param userId user id
+     * @return confirmation string
+     */
+    @DeleteMapping("/{userId}")
+    String delete(@PathVariable Integer userId) {
+        return userService.deleteUser(userId);
     }
 }
