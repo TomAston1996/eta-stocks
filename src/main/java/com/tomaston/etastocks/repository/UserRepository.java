@@ -1,7 +1,7 @@
 package com.tomaston.etastocks.repository;
 
 import com.tomaston.etastocks.domain.User;
-import com.tomaston.etastocks.exception.ApiRequestException;
+import com.tomaston.etastocks.exception.BadRequestException;
 import com.tomaston.etastocks.exception.NotFoundRequestException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JdbcClientUserRepository {
+public class UserRepository {
 
     private final JdbcClient jdbcClient;
 
-    public JdbcClientUserRepository(JdbcClient jdbcClient) {
+    public UserRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 
@@ -52,7 +52,7 @@ public class JdbcClientUserRepository {
      */
     public String create(User user) {
         if (user.email() == null || user.pass() == null) {
-            throw new ApiRequestException("Either email or password is missing...");
+            throw new BadRequestException("Either email or password is missing...");
         }
 
         LocalDateTime now = LocalDateTime.now();

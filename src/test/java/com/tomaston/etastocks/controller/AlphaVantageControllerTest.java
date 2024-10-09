@@ -20,14 +20,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
-@WebMvcTest(controllers = StocksController.class)
+@WebMvcTest(controllers = AlphaVantageController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
-class StocksControllerTest {
+class AlphaVantageControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

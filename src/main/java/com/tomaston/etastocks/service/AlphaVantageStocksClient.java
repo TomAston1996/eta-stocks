@@ -3,7 +3,7 @@ package com.tomaston.etastocks.service;
 import com.tomaston.etastocks.domain.AVEtfProfileJson;
 import com.tomaston.etastocks.domain.AVTickerProfileJson;
 import com.tomaston.etastocks.domain.AVTimeSeriesJson;
-import com.tomaston.etastocks.exception.ApiRequestException;
+import com.tomaston.etastocks.exception.BadRequestException;
 import com.tomaston.etastocks.exception.NotFoundRequestException;
 import com.tomaston.etastocks.exception.RateLimitedRequestException;
 import lombok.extern.slf4j.Slf4j;
@@ -80,7 +80,7 @@ public class AlphaVantageStocksClient {
                     throw new RateLimitedRequestException("Alpha Vantage limits API calls to 25 requests per" +
                             " day for free users.");
                 } else {
-                    throw new ApiRequestException("The request params to Alpha Vantage are likely not valid.");
+                    throw new BadRequestException("The request params to Alpha Vantage are likely not valid.");
                 }
             }
 
@@ -124,7 +124,7 @@ public class AlphaVantageStocksClient {
                     throw new RateLimitedRequestException("Alpha Vantage limits API calls to 25 requests per" +
                             " day for free users.");
                 } else {
-                    throw new ApiRequestException("The request params to Alpha Vantage are likely not valid or the ETF does not" +
+                    throw new BadRequestException("The request params to Alpha Vantage are likely not valid or the ETF does not" +
                             " exist on the Alpha Vantage ETF holdings database");
                 }
             }
@@ -174,7 +174,7 @@ public class AlphaVantageStocksClient {
             return functionMap.get(function);
         } else {
             log.debug("Function code: '{}' used", function);
-            throw new ApiRequestException("The 'function' request parameter you provided to Alpha Vantage is not valid." +
+            throw new BadRequestException("The 'function' request parameter you provided to Alpha Vantage is not valid." +
                     " Function options are: {'monthly', 'daily'}");
         }
     }

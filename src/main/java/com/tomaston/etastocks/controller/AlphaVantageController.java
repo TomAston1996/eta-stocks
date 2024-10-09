@@ -1,6 +1,5 @@
 package com.tomaston.etastocks.controller;
 
-import com.tomaston.etastocks.domain.AVTickerProfileJson;
 import com.tomaston.etastocks.dto.AVEtfProfileDTO;
 import com.tomaston.etastocks.dto.AVTickerSearchDTO;
 import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
@@ -14,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/stocks")
-public class StocksController {
+public class AlphaVantageController {
 
     private final AlphaVantageStocksService stocksService;
 
-    public StocksController(final AlphaVantageStocksService stocksService) {
+    public AlphaVantageController(final AlphaVantageStocksService stocksService) {
         this.stocksService = stocksService;
     }
 

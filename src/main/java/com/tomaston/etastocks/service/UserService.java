@@ -3,7 +3,7 @@ package com.tomaston.etastocks.service;
 import com.tomaston.etastocks.domain.User;
 import com.tomaston.etastocks.dto.UserDTO;
 import com.tomaston.etastocks.exception.NotFoundRequestException;
-import com.tomaston.etastocks.repository.JdbcClientUserRepository;
+import com.tomaston.etastocks.repository.UserRepository;
 import com.tomaston.etastocks.utils.DateTimeConverter;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +14,17 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    final private JdbcClientUserRepository jdbcClientUserRepository;
+    final private UserRepository userRepository;
 
-    public UserService(JdbcClientUserRepository jdbcClientUserRepository) {
-        this.jdbcClientUserRepository = jdbcClientUserRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     /** GET all users to client response object
      * @return list of all users in the user database (excluding passwords)
      */
     public List<UserDTO> getAllUsers() {
-        List<User> users = jdbcClientUserRepository.findAll();
+        List<User> users = userRepository.findAll();
         List<UserDTO> clientResponse = new ArrayList<>();
         for (User user : users) {
             clientResponse.add(
@@ -43,7 +43,7 @@ public class UserService {
      * @return user information (excluding password)
      */
     public UserDTO getUserById(Integer userId) {
-        Optional<User> user = jdbcClientUserRepository.findById(userId);
+        Optional<User> user = userRepository.findById(userId);
 
         if (user.isEmpty()) {
             throw new NotFoundRequestException("User with id {" + userId + "} not found...");
@@ -61,7 +61,7 @@ public class UserService {
      * @return confirmation string
      */
     public String createUser(User user) {
-        return jdbcClientUserRepository.create(user);
+        return userRepository.create(user);
     }
 
     /** UPDATE user by id
@@ -70,7 +70,7 @@ public class UserService {
      * @return userDTO
      */
     public UserDTO updateUser(User user, Integer userId) {
-        jdbcClientUserRepository.update(user, userId);
+        userRepository.update(user, userId);
         return getUserById(userId);
     }
 
@@ -79,6 +79,6 @@ public class UserService {
      * @return confirmation string
      */
     public String deleteUser(Integer userId) {
-        return jdbcClientUserRepository.delete(userId);
+        return userRepository.delete(userId);
     }
 }

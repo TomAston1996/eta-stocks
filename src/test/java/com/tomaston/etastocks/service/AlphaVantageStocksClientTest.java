@@ -3,7 +3,7 @@ package com.tomaston.etastocks.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tomaston.etastocks.config.RestTemplateConfig;
 import com.tomaston.etastocks.domain.AVTimeSeriesJson;
-import com.tomaston.etastocks.exception.ApiRequestException;
+import com.tomaston.etastocks.exception.BadRequestException;
 import com.tomaston.etastocks.utils.FileUtil;
 import com.tomaston.etastocks.utils.MapperUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,8 +68,8 @@ class AlphaVantageStocksClientTest {
         //TODO include a check for missing or incorrect symbol type in this test
         String emptyFunctionParameter = "";
 
-        ApiRequestException missingFunctionException =  assertThrows(
-                ApiRequestException.class,
+        BadRequestException missingFunctionException =  assertThrows(
+                BadRequestException.class,
                 () -> client.getAlphaVantageTimeSeriesStockData("LON:VUAG", emptyFunctionParameter));
 
         String expectedBadRequestMessage = "The 'function' request parameter you provided to Alpha Vantage is not valid." +
