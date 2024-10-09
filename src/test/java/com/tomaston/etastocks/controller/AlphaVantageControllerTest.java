@@ -49,7 +49,7 @@ class AlphaVantageControllerTest {
 
         when(stocksService.getTimeSeriesStockData("LON:VUAG", "monthly")).thenReturn(avClientDataTestJson);
 
-        ResultActions response = mockMvc.perform(get("/api/stocks/series")
+        ResultActions response = mockMvc.perform(get("/api/avStocks/series")
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("symbol", "LON:VUAG")
                 .param("function", "monthly"));

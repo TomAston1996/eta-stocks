@@ -1,14 +1,11 @@
 package com.tomaston.etastocks.repository;
 
-import com.tomaston.etastocks.domain.Stock;
 import com.tomaston.etastocks.domain.UserStock;
 import com.tomaston.etastocks.exception.NotFoundRequestException;
-import com.tomaston.etastocks.exception.ServerErrorException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

@@ -50,4 +50,14 @@ public class ApiExceptionHandler {
         );
         return new ResponseEntity<>(serverErrorException, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(value = {AlreadyExistsException.class})
+    public ResponseEntity<Object> handleAlreadyExistsException(AlreadyExistsException e) {
+        ApiException alreadyExistsException = new ApiException(
+                e.getMessage(),
+                HttpStatus.CONFLICT,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+        return new ResponseEntity<>(alreadyExistsException, HttpStatus.CONFLICT);
+    }
 }
