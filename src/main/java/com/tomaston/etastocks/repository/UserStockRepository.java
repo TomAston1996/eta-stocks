@@ -13,7 +13,6 @@ import java.util.Optional;
 public class UserStockRepository {
 
     private final JdbcClient jdbcClient;
-    private final String USER_STOCK_TABLE_NAME = "usersstocks";
 
     public UserStockRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
@@ -25,8 +24,8 @@ public class UserStockRepository {
      * @return user-stock record from users-stocks intermediary table
      */
     public Optional<UserStock> findById(Integer stockId, Integer userId) {
-        Optional<UserStock> userStock =  jdbcClient.sql("SELECT * FROM ? WHERE stockId = ? AND userId = ?")
-                .params(List.of(USER_STOCK_TABLE_NAME, stockId, userId))
+        Optional<UserStock> userStock =  jdbcClient.sql("SELECT * FROM usersstocks WHERE stockId = ? AND userId = ?")
+                .params(List.of(stockId, userId))
                 .query(UserStock.class)
                 .optional();
 
@@ -42,8 +41,8 @@ public class UserStockRepository {
      * @return all stock ids from user-stock table associated with that user
      */
     public List<UserStock> findAllByUserId(Integer userId) {
-        List<UserStock> userStocks =  jdbcClient.sql("SELECT * FROM ? WHERE symbol = ?")
-                .params(List.of(USER_STOCK_TABLE_NAME, userId))
+        List<UserStock> userStocks =  jdbcClient.sql("SELECT * FROM usersstocks WHERE userid = :userid")
+                .param("userid", userId)
                 .query(UserStock.class)
                 .list();
 
@@ -60,8 +59,8 @@ public class UserStockRepository {
      * @return newly created stock id
      */
     public String create(Integer stockId, Integer userId) {
-        int updated = jdbcClient.sql("INSERT INTO ? (userid, stockid) VALUES(?,?)")
-                .params(List.of(USER_STOCK_TABLE_NAME, userId, stockId))
+        int updated = jdbcClient.sql("INSERT INTO usersstocks(userid, stockid) VALUES(?,?)")
+                .params(List.of(userId, stockId))
                 .update();
 
         Assert.state(updated == 1, "Failed to create user-stock relationship");
