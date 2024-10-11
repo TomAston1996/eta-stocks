@@ -48,7 +48,7 @@ public class UserStockRepository {
     public List<Stock> findAllByUserId(Integer userId) {
         List<Stock> userStocks =  jdbcClient.sql(
                     "SELECT b.stockid, b.symbol, b.name, b.type, b.region, b.currency FROM usersstocks a JOIN stocks b" +
-                    "ON a.stockid = b.stockid WHERE a.userid = :userid"
+                    " ON a.stockid = b.stockid WHERE a.userid = :userid"
                 )
                 .param("userid", userId)
                 .query(Stock.class)

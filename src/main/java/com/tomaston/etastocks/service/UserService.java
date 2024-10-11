@@ -1,9 +1,11 @@
 package com.tomaston.etastocks.service;
 
+import com.tomaston.etastocks.domain.Stock;
 import com.tomaston.etastocks.domain.User;
 import com.tomaston.etastocks.dto.UserDTO;
 import com.tomaston.etastocks.exception.NotFoundRequestException;
 import com.tomaston.etastocks.repository.UserRepository;
+import com.tomaston.etastocks.repository.UserStockRepository;
 import com.tomaston.etastocks.utils.DateTimeConverter;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,11 @@ import java.util.Optional;
 public class UserService {
 
     final private UserRepository userRepository;
+    final private UserStockRepository userStockRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserStockRepository userStockRepository) {
         this.userRepository = userRepository;
+        this.userStockRepository = userStockRepository;
     }
 
     /** GET all users to client response object
@@ -80,5 +84,13 @@ public class UserService {
      */
     public String deleteUser(Integer userId) {
         return userRepository.delete(userId);
+    }
+
+    /** GET all favourite stocks by userId
+     * @param userId user id
+     * @return list of stock information saved by the user
+     */
+    public List<Stock> getUserStocksByUserId(Integer userId) {
+        return userStockRepository.findAllByUserId(userId);
     }
 }

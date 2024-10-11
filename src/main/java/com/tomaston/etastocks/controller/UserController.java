@@ -1,5 +1,6 @@
 package com.tomaston.etastocks.controller;
 
+import com.tomaston.etastocks.domain.Stock;
 import com.tomaston.etastocks.domain.User;
 import com.tomaston.etastocks.dto.UserDTO;
 import com.tomaston.etastocks.service.UserService;
@@ -62,5 +63,10 @@ public class UserController {
     @DeleteMapping("/{userId}")
     String delete(@PathVariable Integer userId) {
         return userService.deleteUser(userId);
+    }
+
+    @GetMapping("/myStocks/{userId}")
+    List<Stock> findMyStocksById(@PathVariable Integer userId) {
+        return userService.getUserStocksByUserId(userId);
     }
 }
