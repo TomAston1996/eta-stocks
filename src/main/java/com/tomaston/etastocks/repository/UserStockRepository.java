@@ -1,6 +1,8 @@
 package com.tomaston.etastocks.repository;
 
+import com.tomaston.etastocks.domain.Stock;
 import com.tomaston.etastocks.domain.UserStock;
+import com.tomaston.etastocks.exception.AlreadyExistsException;
 import com.tomaston.etastocks.exception.NotFoundRequestException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -18,32 +20,38 @@ public class UserStockRepository {
         this.jdbcClient = jdbcClient;
     }
 
+    /** GET all user-stock relationships from postgres usersstocks table
+     * @return list of all user-stocks relationships
+     */
+    public List<UserStock> findAll() {
+        return jdbcClient.sql("SELECT * FROM usersstocks")
+                .query(UserStock.class)
+                .list();
+    }
+
     /** GET individual favourite stock by userId and stockId
-     * @param stockId stock id
-     * @param userId user id
+     * @param stockId stock id (compound key)
+     * @param userId user id (compound key)
      * @return user-stock record from users-stocks intermediary table
      */
     public Optional<UserStock> findById(Integer stockId, Integer userId) {
-        Optional<UserStock> userStock =  jdbcClient.sql("SELECT * FROM usersstocks WHERE stockId = ? AND userId = ?")
+        return jdbcClient.sql("SELECT * FROM usersstocks WHERE stockId = ? AND userId = ?")
                 .params(List.of(stockId, userId))
                 .query(UserStock.class)
                 .optional();
-
-        if (userStock.isEmpty()) {
-            throw new NotFoundRequestException("Stock with stockId {" + stockId + "} and userId {" + userId +"} not found...");
-        }
-
-        return userStock;
     }
 
-    /** GET all favourite stockIds by userId
+    /** GET all favourite stocks and relevant stock info by userId
      * @param userId user id
-     * @return all stock ids from user-stock table associated with that user
+     * @return all stock ids and info from user-stock table associated with that user
      */
-    public List<UserStock> findAllByUserId(Integer userId) {
-        List<UserStock> userStocks =  jdbcClient.sql("SELECT * FROM usersstocks WHERE userid = :userid")
+    public List<Stock> findAllByUserId(Integer userId) {
+        List<Stock> userStocks =  jdbcClient.sql(
+                    "SELECT b.stockid, b.symbol, b.name, b.type, b.region, b.currency FROM usersstocks a JOIN stocks b" +
+                    "ON a.stockid = b.stockid WHERE a.userid = :userid"
+                )
                 .param("userid", userId)
-                .query(UserStock.class)
+                .query(Stock.class)
                 .list();
 
         if (userStocks.isEmpty()) {
@@ -54,11 +62,15 @@ public class UserStockRepository {
     }
 
     /** CREATE a new user-stock association in the user-stocks table
-     * @param stockId stock id
-     * @param userId user id
+     * @param stockId stock id (compound key)
+     * @param userId user id (compound key)
      * @return newly created stock id
      */
     public String create(Integer stockId, Integer userId) {
+        if (this.findById(stockId, userId).isPresent()) {
+            throw new AlreadyExistsException("Stock-user relationship already exists...");
+        }
+
         int updated = jdbcClient.sql("INSERT INTO usersstocks(userid, stockid) VALUES(?,?)")
                 .params(List.of(userId, stockId))
                 .update();
@@ -66,5 +78,23 @@ public class UserStockRepository {
         Assert.state(updated == 1, "Failed to create user-stock relationship");
 
         return "Successfully created user-stock relationship between userId {" + userId + "} and stockId {" + stockId + "}";
+    }
+
+    /** DELETE stock-user association
+     * @param stockId stock id to be deleted (compound key)
+     * @param userId user id to be deleted (compound key)
+     */
+    public String delete(Integer stockId, Integer userId) {
+        if (this.findById(stockId, userId).isEmpty()) {
+            throw new NotFoundRequestException("User-stock relationship not found...");
+        }
+
+        int updated = jdbcClient.sql("DELETE FROM usersstocks WHERE stockId = ? AND userId = ?")
+                .params(List.of(stockId, userId))
+                .update();
+
+        Assert.state(updated == 1, "Failed to delete stock " + stockId);
+
+        return "User-stock relationship successfully deleted...";
     }
 }
