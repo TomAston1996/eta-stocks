@@ -1,10 +1,7 @@
 package com.tomaston.etastocks.controller;
 
-import com.tomaston.etastocks.domain.User;
 import com.tomaston.etastocks.domain.UserStock;
-import com.tomaston.etastocks.dto.StockDTO;
 import com.tomaston.etastocks.service.UserStockService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

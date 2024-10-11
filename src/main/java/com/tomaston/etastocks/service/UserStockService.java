@@ -2,6 +2,8 @@ package com.tomaston.etastocks.service;
 
 import com.tomaston.etastocks.domain.UserStock;
 import com.tomaston.etastocks.exception.NotFoundRequestException;
+import com.tomaston.etastocks.repository.StockRepository;
+import com.tomaston.etastocks.repository.UserRepository;
 import com.tomaston.etastocks.repository.UserStockRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,9 +14,13 @@ import java.util.Optional;
 public class UserStockService {
 
     final private UserStockRepository userStockRepository;
+    final private StockRepository stockRepository;
+    final private UserRepository userRepository;
 
-    public UserStockService(UserStockRepository userStockRepository) {
+    public UserStockService(UserStockRepository userStockRepository, StockRepository stockRepository, UserRepository userRepository) {
         this.userStockRepository = userStockRepository;
+        this.stockRepository = stockRepository;
+        this.userRepository = userRepository;
     }
 
     /** GET all user-stocks
@@ -44,6 +50,9 @@ public class UserStockService {
      * @return confirmation string
      */
     public String createUserStock(Integer stockId, Integer userId) {
+        if (this.userRepository.findById(userId).isEmpty() || this.stockRepository.findById(stockId).isEmpty()) {
+            throw new NotFoundRequestException("Either userId or stockId does not exist...");
+        }
         return userStockRepository.create(stockId, userId);
     }
 
@@ -53,6 +62,9 @@ public class UserStockService {
      * @return confirmation string
      */
     public String deleteUserStock(Integer stockId, Integer userId) {
+        if (this.userRepository.findById(userId).isEmpty() || this.stockRepository.findById(stockId).isEmpty()) {
+            throw new NotFoundRequestException("Either userId or stockId does not exist...");
+        }
         return userStockRepository.delete(stockId, userId);
     }
 }
