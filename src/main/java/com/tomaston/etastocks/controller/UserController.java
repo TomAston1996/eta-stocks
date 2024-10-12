@@ -66,6 +66,7 @@ public class UserController {
     }
 
     @GetMapping("/myStocks/{userId}")
+    @CrossOrigin(origins = "http://localhost:3000")
     List<Stock> findMyStocksById(@PathVariable Integer userId) {
         return userService.getUserStocksByUserId(userId);
     }
