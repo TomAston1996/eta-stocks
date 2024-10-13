@@ -6,10 +6,7 @@ import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
 import com.tomaston.etastocks.service.AlphaVantageStocksService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/avStocks")
@@ -27,6 +24,7 @@ public class AlphaVantageController {
      * @return JSON response
      */
     @GetMapping(value="/series", produces="application/json")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<AVTimeSeriesDTO> getTimeSeriesStockData(
             @RequestParam(name="symbol", required=true) final String symbol,
             @RequestParam(name="function", required=true) final String function
