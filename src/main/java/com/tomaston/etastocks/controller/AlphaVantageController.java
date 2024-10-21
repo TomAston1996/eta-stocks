@@ -38,6 +38,7 @@ public class AlphaVantageController {
      * @return JSON
      */
     @GetMapping(value="/etf", produces="application/json")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<AVEtfProfileDTO> getEtfProfileData(
             @RequestParam(name="symbol", required=true) final String symbol,
             @RequestParam(name="function", required=true) final String function
@@ -50,6 +51,7 @@ public class AlphaVantageController {
      * @return JSON
      */
     @GetMapping(value="/searchTicker", produces="application/json")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<AVTickerSearchDTO> getTickerSearchData(
             @RequestParam(name="symbol", required=true) final String symbol
     ) {
