@@ -10,8 +10,6 @@
 etaStocks is a web application for tracking stock and ETF (Exchange Traded Fund) price data. The backend interfaces with Alpha Vantages stocks API, 
 personalising the content for users of the app. The goal of the app is to create a personalised space for monitoring and exploring investments.
 
-![alt text](https://github.com/TomAston1996/eta-stocks-frontend/blob/master/images/website.png?raw=true)
-
 ## 🧑‍💻 Tech Stack
 
 ![Java]
@@ -36,7 +34,11 @@ Add your API key to your ```application.properties``` file:  ```alphaVantageApiK
 
 ### MVC Architecture
 
-![alt text](https://github.com/TomAston1996/eta-stocks/blob/master/images/mvc.png?raw=true)
+![mvc](./images/mvc.png)
+
+### Database Schema
+
+![mvc](./images/db-schema.png)
 
 ## 🧑‍🤝‍🧑 Developers 
 
