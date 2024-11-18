@@ -30,7 +30,7 @@ Docker Engine is required to run the PostreSQL database.
 Change the ```docker-compose.yml``` file to whichever port you want to run your database (default port 5432)
 
 ### Alpha Vantage API Key
-A free-tier Alpha Vantage API key can be obtained from https://www.alphavantage.co/
+A free-tier Alpha Vantage API key can be obtained from https://www.alphavantage.co
 
 Add your API key to your ```application.properties``` file:  ```alphaVantageApiKey=[yourApiKey]```
 
