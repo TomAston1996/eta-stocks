@@ -7,3 +7,8 @@ services:
       - 'POSTGRES_USER=admin'
     ports:
       - '5433:5432'
+  cache:
+    image: 'redis:latest'
+    restart: 'always'
+    ports:
+      - '6379:6379'
