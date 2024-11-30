@@ -18,6 +18,7 @@ personalising the content for users of the app. The goal of the app is to create
 ![Spring]
 ![Postgres]
 ![Docker]
+![Redis]
 
 ## 🔧 Setup
 
@@ -25,7 +26,7 @@ personalising the content for users of the app. The goal of the app is to create
 All maven dependencies can be located in ```pom.xml```
 
 ### Docker
-Docker Engine is required to run the PostreSQL database. 
+Docker Engine is required to run the PostreSQL database and Redis cache.
 
 Change the ```docker-compose.yml``` file to whichever port you want to run your database (default port 5432)
 
@@ -66,3 +67,4 @@ Add your API key to your ```application.properties``` file:  ```alphaVantageApiK
 [Spring]: https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white
 [Postgres]: https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white
 [Docker]: https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white
+[Redis]: https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white
