@@ -34,7 +34,6 @@ public class AlphaVantageController {
             @RequestParam(name="symbol", required=true) final String symbol,
             @RequestParam(name="function", required=true) final String function
     ) {
-        log.info("AV controller time series request...");
         return new ResponseEntity<AVTimeSeriesDTO>(stocksService.getTimeSeriesStockData(symbol, function), HttpStatus.OK);
     }
 

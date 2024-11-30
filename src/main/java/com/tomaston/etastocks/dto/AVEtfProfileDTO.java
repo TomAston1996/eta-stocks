@@ -7,12 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AVEtfProfileDTO {
+public class AVEtfProfileDTO implements Serializable {
     public List<AVEtfProfileSectorsData> sectorsData;
     public List<AVEtfProfileHoldingsData> topTenHoldings;
 }

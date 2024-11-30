@@ -36,6 +36,7 @@ public class AlphaVantageStocksService {
      */
     @Cacheable(cacheNames = "timeSeries", key = "#symbol")
     public AVTimeSeriesDTO getTimeSeriesStockData(final String symbol, final String function) {
+        log.info("Data not in cache -> Getting time series data from AV API");
         final AVTimeSeriesJson response = avStocksClient.getAlphaVantageTimeSeriesStockData(symbol, function);
         return convertAlphaVantageRawResponse(response.metaData, response.seriesData);
     }
@@ -47,6 +48,7 @@ public class AlphaVantageStocksService {
      */
     @Cacheable(cacheNames = "etfProfile", key = "#symbol")
     public AVEtfProfileDTO getEtfProfileData(final String symbol, final String function) {
+        log.info("Data not in cache -> Getting etf profile data from AV API");
         final AVEtfProfileJson response = avStocksClient.getAlphaVantageEtfProfileData(symbol, function);
         AVEtfProfileDTO avEtfProfileDTO = new AVEtfProfileDTO();
         avEtfProfileDTO.sectorsData = response.sectorsData;
@@ -60,17 +62,18 @@ public class AlphaVantageStocksService {
      */
     @Cacheable(cacheNames = "ticker", key = "#symbol")
     public AVTickerSearchDTO getTickerSearchData(final String symbol) {
+        log.info("Data not in cache -> Getting ticker data from AV API");
         AVTickerProfileJson response = avStocksClient.getAlphaVantageTickerData(symbol);
 
         List<AVTickerDataDTO> bestMatches = new ArrayList<>(10);
         for (AVTickerData ticker : response.bestMatches) {
-            AVTickerDataDTO clientTicker = new AVTickerDataDTO(
-                    ticker.symbol,
-                    ticker.name,
-                    ticker.type,
-                    ticker.region,
-                    ticker.currency
-            );
+            AVTickerDataDTO clientTicker = AVTickerDataDTO.builder()
+                    .symbol(ticker.symbol)
+                    .name(ticker.name)
+                    .region(ticker.region)
+                    .currency(ticker.currency)
+                    .type(ticker.type)
+                    .build();
             bestMatches.add(clientTicker);
         }
 
