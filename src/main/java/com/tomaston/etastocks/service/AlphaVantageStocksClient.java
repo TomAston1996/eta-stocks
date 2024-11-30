@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 @Slf4j
@@ -27,7 +29,10 @@ public class AlphaVantageStocksClient {
     private final RestTemplate restTemplate;
     private final String BASE_URL = "https://www.alphavantage.co/";
 
-    @Value("${alphaVantageApiKey}")
+    private final Properties apiKeyProperties;
+    private final String rootPath;
+
+//    @Value("${alphaVantageApiKey}")
     private String alphaVantageApiKey;
 
     private final Map<String, String> functionMap;
@@ -39,6 +44,23 @@ public class AlphaVantageStocksClient {
                 "daily", "TIME_SERIES_DAILY",
                 "etfProfile", "ETF_PROFILE"
         );
+
+        this.apiKeyProperties = new Properties();
+        this.rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
+        log.info("App root path is: {}", rootPath);
+        setAvApiKey();
+        log.info("AV API key has been found");
+    }
+
+    private void setAvApiKey() {
+        try {
+            apiKeyProperties.load(new FileInputStream(rootPath + "/apiKeys.properties"));
+            alphaVantageApiKey = apiKeyProperties.getProperty("alphaVantageApiKey");
+            log.info("Success loading Alpha Vantage API key");
+        } catch (IOException e) {
+            log.info("Alpha Vantage API key not found");
+            throw new RuntimeException(e);
+        }
     }
 
     /**
