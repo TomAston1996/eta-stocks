@@ -31,8 +31,6 @@ public class AlphaVantageStocksClient {
 
     private final Properties apiKeyProperties;
     private final String rootPath;
-
-//    @Value("${alphaVantageApiKey}")
     private String alphaVantageApiKey;
 
     private final Map<String, String> functionMap;
