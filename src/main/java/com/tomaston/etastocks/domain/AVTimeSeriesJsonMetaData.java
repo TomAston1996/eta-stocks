@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /** Models the meta JSON data from AlphaVantageStocksClientImpl
  * Example Data:
  *"Metadata": {
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AVTimeSeriesJsonMetaData {
+public class AVTimeSeriesJsonMetaData implements Serializable {
     @JsonProperty("1. Information")
     public String info;
     @JsonProperty("2. Symbol")

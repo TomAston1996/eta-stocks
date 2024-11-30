@@ -9,6 +9,7 @@ import com.tomaston.etastocks.utils.DateTimeConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class AlphaVantageStocksService {
 
-    private static Logger log = LoggerFactory.getLogger(AlphaVantageStocksClient.class);
+    private static final Logger log = LoggerFactory.getLogger(AlphaVantageStocksClient.class);
 
     private final AlphaVantageStocksClient avStocksClient;
 
@@ -33,6 +34,7 @@ public class AlphaVantageStocksService {
      * @param function options = 'monthly' or 'daily'
      * @return cleaned JSON data
      */
+    @Cacheable(cacheNames = "timeSeries", key = "#symbol")
     public AVTimeSeriesDTO getTimeSeriesStockData(final String symbol, final String function) {
         final AVTimeSeriesJson response = avStocksClient.getAlphaVantageTimeSeriesStockData(symbol, function);
         return convertAlphaVantageRawResponse(response.metaData, response.seriesData);
@@ -43,6 +45,7 @@ public class AlphaVantageStocksService {
      * @param function options = 'etfProfile' //TODO remove this - is not needed from client
      * @return clean data
      */
+    @Cacheable(cacheNames = "etfProfile", key = "#symbol")
     public AVEtfProfileDTO getEtfProfileData(final String symbol, final String function) {
         final AVEtfProfileJson response = avStocksClient.getAlphaVantageEtfProfileData(symbol, function);
         AVEtfProfileDTO avEtfProfileDTO = new AVEtfProfileDTO();
@@ -55,6 +58,7 @@ public class AlphaVantageStocksService {
      * @param symbol symbol search string
      * @return list of tickers returned from search term
      */
+    @Cacheable(cacheNames = "ticker", key = "#symbol")
     public AVTickerSearchDTO getTickerSearchData(final String symbol) {
         AVTickerProfileJson response = avStocksClient.getAlphaVantageTickerData(symbol);
 
@@ -90,14 +94,13 @@ public class AlphaVantageStocksService {
         for (Map.Entry<String, AVTimeSeriesJsonRawData> entry : seriesData.entrySet()) {
             Long unixDateTime = DateTimeConverter.stringToUnix(entry.getKey());
             AVTimeSeriesJsonRawData data = entry.getValue();
-            AVTimeSeriesJsonCleanData obj = new AVTimeSeriesJsonCleanData(
-                    unixDateTime,
-                    Double.parseDouble(data.openingPrice),
-                    Double.parseDouble(data.closingPrice),
-                    Double.parseDouble(data.lowPrice),
-                    Double.parseDouble(data.highPrice)
-            );
-
+            AVTimeSeriesJsonCleanData obj = AVTimeSeriesJsonCleanData.builder()
+                    .unixTimestamp(unixDateTime)
+                    .openStockPrice(Double.parseDouble(data.openingPrice))
+                    .closeStockPrice(Double.parseDouble(data.closingPrice))
+                    .lowStockPrice(Double.parseDouble(data.lowPrice))
+                    .highStockPrice(Double.parseDouble(data.highPrice))
+                    .build();
             timeSeriesStockData.add(obj);
         }
 

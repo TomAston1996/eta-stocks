@@ -52,11 +52,11 @@ class AlphaVantageStocksServiceTest {
         //make sure each data object contains the correct info
         for (AVTimeSeriesJsonCleanData data : seriesData) {
             assertAll("Series Data Null Check",
-                    () -> assertNotNull(data.closeStockPrice()),
-                    () -> assertNotNull(data.lowStockPrice()),
-                    () -> assertNotNull(data.highStockPrice()),
-                    () -> assertNotNull(data.openStockPrice()),
-                    () -> assertEquals(data.unixTimestamp().getClass(), Long.class)
+                    () -> assertNotNull(data.closeStockPrice),
+                    () -> assertNotNull(data.lowStockPrice),
+                    () -> assertNotNull(data.highStockPrice),
+                    () -> assertNotNull(data.openStockPrice),
+                    () -> assertEquals(data.unixTimestamp.getClass(), Long.class)
             );
         }
     }

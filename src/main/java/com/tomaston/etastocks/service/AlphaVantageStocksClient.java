@@ -50,6 +50,8 @@ public class AlphaVantageStocksClient {
     public AVTimeSeriesJson getAlphaVantageTimeSeriesStockData(final String symbol, final String function) {
         String functionCode = getValidFunctionCode(function);
 
+        log.info("GET Alpha Vantage time series data from 3rd Party API");
+
         final ParameterizedTypeReference<AVTimeSeriesJson> avTimeSeriesStockResponse = new ParameterizedTypeReference<>() {
         };
 

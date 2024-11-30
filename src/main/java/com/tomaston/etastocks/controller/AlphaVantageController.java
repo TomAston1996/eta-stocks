@@ -3,7 +3,10 @@ package com.tomaston.etastocks.controller;
 import com.tomaston.etastocks.dto.AVEtfProfileDTO;
 import com.tomaston.etastocks.dto.AVTickerSearchDTO;
 import com.tomaston.etastocks.dto.AVTimeSeriesDTO;
+import com.tomaston.etastocks.service.AlphaVantageStocksClient;
 import com.tomaston.etastocks.service.AlphaVantageStocksService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/avStocks")
 public class AlphaVantageController {
+
+    private static final Logger log = LoggerFactory.getLogger(AlphaVantageController.class);
 
     private final AlphaVantageStocksService stocksService;
 
@@ -29,6 +34,7 @@ public class AlphaVantageController {
             @RequestParam(name="symbol", required=true) final String symbol,
             @RequestParam(name="function", required=true) final String function
     ) {
+        log.info("AV controller time series request...");
         return new ResponseEntity<AVTimeSeriesDTO>(stocksService.getTimeSeriesStockData(symbol, function), HttpStatus.OK);
     }
 
