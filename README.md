@@ -26,7 +26,7 @@ personalising the content for users of the app. The goal of the app is to create
 All maven dependencies can be located in ```pom.xml```
 
 ### Docker
-Docker Engine is required to run the PostreSQL database. 
+Docker Engine is required to run the PostreSQL database and Redis cache.
 
 Change the ```docker-compose.yml``` file to whichever port you want to run your database (default port 5432)
 
