@@ -3,6 +3,7 @@ package com.tomaston.etastocks.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -13,6 +14,9 @@ public class AVTickerDataDTO implements Serializable {
     public String type;
     public String region;
     public String currency;
+
+    @Serial
+    private static final long serialVersionUID = 4001275937856288897L;
 
     private AVTickerDataDTO(String symbol, String name, String type, String region, String currency) {
         this.symbol = symbol;
