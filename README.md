@@ -33,7 +33,7 @@ Change the ```docker-compose.yml``` file to whichever port you want to run your 
 ### Alpha Vantage API Key
 A free-tier Alpha Vantage API key can be obtained from https://www.alphavantage.co
 
-Add your API key to your ```application.properties``` file:  ```alphaVantageApiKey=[yourApiKey]```
+Add your API key to your ```apiKeys.properties``` file:  ```alphaVantageApiKey=[yourApiKey]```
 
 ### MVC Architecture
 
