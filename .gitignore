@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 **/src/main/resources/apiKeys.properties
+apiKeys.properties
 /psql-commands.txt
 
 ### STS ###

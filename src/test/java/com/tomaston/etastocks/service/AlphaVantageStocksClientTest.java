@@ -16,7 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -36,8 +39,8 @@ class AlphaVantageStocksClientTest {
     private RestTemplate template;
 
     AVTimeSeriesJson avRawDataTestJson;
+    private Properties apiKeyProperties;
 
-    @Value("${alphaVantageApiKey}")
     private String alphaVantageApiKey;
 
     @BeforeEach
@@ -45,6 +48,18 @@ class AlphaVantageStocksClientTest {
         server = MockRestServiceServer.createServer(template);
         String avRawDataJson = FileUtil.readFromFileToString("/files/alpha_vantage_raw_stock_data.json");
         this.avRawDataTestJson = MapperUtil.deserializeAVRawSeries(avRawDataJson);
+        this.apiKeyProperties = new Properties();
+        setAvApiKey();
+    }
+
+    private void setAvApiKey() {
+        try {
+            String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
+            apiKeyProperties.load(new FileInputStream(rootPath + "/apiKeys.properties"));
+            alphaVantageApiKey = apiKeyProperties.getProperty("alphaVantageApiKey");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
